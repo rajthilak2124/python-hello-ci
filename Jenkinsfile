@@ -1,20 +1,21 @@
 pipeline {
-    agent {
-        docker { image 'python:3.9' }
-    }
+    agent any
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/rajthilak2124/python-hello-ci.git'
             }
         }
-        stage('Build') {
-            steps {
-                sh 'pip install -r requirements.txt'
+        stage('Build & Test in Docker') {
+            agent {
+                docker {
+                    image 'python:3.9'
+                    args '-u root:root'   // gives root user inside container (fixes pip perms)
+                }
             }
-        }
-        stage('Test') {
             steps {
+                sh 'python --version'
+                sh 'pip install -r requirements.txt'
                 sh 'pytest || true'
             }
         }
