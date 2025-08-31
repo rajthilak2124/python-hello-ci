@@ -10,7 +10,7 @@ pipeline {
             agent {
                 docker {
                     image 'python:3.9'
-                    args '-u root:root'   // gives root user inside container (fixes pip perms)
+                    args '-u root:root'   // run as root inside container (fix pip permissions)
                 }
             }
             steps {
